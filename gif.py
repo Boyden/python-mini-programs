@@ -1,3 +1,4 @@
+#change gif image color to white and black
 from PIL import Image
 import os, imageio
 
