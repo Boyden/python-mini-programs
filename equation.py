@@ -9,6 +9,6 @@ def solve(a, b, acc):
     elif abs(func(b)) < acc:
     	return b
     elif func(a)*func((a+b)/2) <=0:
-    	return slove(a, (a+b)/2, acc)
+    	return solve(a, (a+b)/2, acc)
     else:
-    	return slove((a+b)/2, b, acc)
+    	return solve((a+b)/2, b, acc)
