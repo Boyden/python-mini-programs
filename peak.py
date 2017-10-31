@@ -1,3 +1,4 @@
+#给定范围求极值点及其区间
 import math
 def fun(x):
 	return x*math.cos(x)
