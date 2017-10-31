@@ -1,3 +1,4 @@
+#Bisection method to solve equation
 import math
 
 def func(val):
