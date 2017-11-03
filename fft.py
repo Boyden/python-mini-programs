@@ -26,7 +26,9 @@ def cal(li, m):
             y[i] = li[x[i]] - W(2**(m+1), i%(2**m))*li[i]
     return y
 
-def fft(li, N = 2**(int(math.log2(len(li))) + 1)):
+def fft(li, N = None):
+    if N == None:
+        N = 2**(int(math.log2(len(li))) + 1)
     y = []
     if len(li) < N:
         temp = [0 for i in range(N - len(li))]
