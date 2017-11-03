@@ -1,3 +1,4 @@
+#Cooley–Tukey FFT algorithm
 import math, time
 N = 1024
 
