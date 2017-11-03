@@ -4,11 +4,6 @@ N = 1024
 def W(N, r):
     return math.e**(-2*r*math.pi*1j/N)
 
-def swap(li, i, j):
-    c = li[i]
-    li[i] = li[j]
-    li[j] = c
-
 def symme(a, N):
     s = str(bin(a))[2:]
     s = (int(math.log2(N)) - len(s))*"0" + s
