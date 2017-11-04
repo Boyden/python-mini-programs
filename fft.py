@@ -4,7 +4,7 @@ N = 1024
 
 def W(N, r):
     return math.e**(-2*r*math.pi*1j/N)
-
+    
 def symme(a, N):
     s = str(bin(a))[2:]
     s = (int(math.log2(N)) - len(s))*"0" + s
@@ -12,23 +12,21 @@ def symme(a, N):
     return int(''.join(s), 2)
 
 def cal(li, m):
-    x = y = [None for i in range(len(li))]
-    for i in range(len(li)):
-        if i in x:
-            x[i] = i - 2**m
-        else:
-            x[i] = i + 2**m
+    y = [None for i in range(len(li))]
 
     for i in range(len(li)):
-        if i < x[i]:
-            y[i] = li[i] + W(2**(m+1), i%(2**m))*li[x[i]]
+        if i%2**(m+1) == i%2**m:
+            y[i] = li[i] + W(2**(m+1), i%(2**m))*li[i + 2**m]
         else:
-            y[i] = li[x[i]] - W(2**(m+1), i%(2**m))*li[i]
+            y[i] = li[i - 2**m] - W(2**(m+1), i%(2**m))*li[i]
     return y
 
 def fft(li, N = None):
     if N == None:
-        N = 2**(int(math.log2(len(li))) + 1)
+        if int(math.log2(len(li))) == math.log2(len(li)):
+            N = 2**(int(math.log2(len(li))))
+        else:
+            N = 2**(int(math.log2(len(li))) + 1)
     y = []
     if len(li) < N:
         temp = [0 for i in range(N - len(li))]
@@ -45,4 +43,6 @@ def fft(li, N = None):
 start = time.time()
 li = [i for i in range(1024)]
 y = fft(li, 1024)
+#numpy.fft.fft(li)
 end = time.time() - start
+
