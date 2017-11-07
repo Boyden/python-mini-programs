@@ -1,3 +1,4 @@
+#automatically update all pypi packages to the latest version
 import os
 
 s = os.popen("pip list --outdate")
