@@ -81,7 +81,7 @@ def text_reply(msg):
 itchat.auto_login(hotReload=True, enableCmdQR=True)
 itchat.run()
 
-#@eb2d8569667266b627785e90123836a9a042928f6b6839d3cdaad1d170e0dc98
+
 '''
 req = requests.get("https://www.bing.com/dict/search?q=" + text, headers=headers)
 html = req.text
