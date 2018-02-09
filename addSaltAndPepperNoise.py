@@ -1,6 +1,11 @@
 import cv2
 import numpy as np
 from numpy import random
+
+#numpy.random.randint
+#Return random integers from low (inclusive) to high (exclusive).
+#it's different from random.randint function in python origin module which include both low and high
+
 def SaltAndPepper(src,percetage):
 
     NoiseImg=np.copy(src)
@@ -17,7 +22,7 @@ def SaltAndPepper(src,percetage):
     return NoiseImg 
     
 if __name__=='__main__':
-    
+
     img=cv2.imread('Lena.jpg',flags=0)
     gimg=cv2.GaussianBlur(img,(7,7),sigmaX=0)
     NoiseImg=SaltAndPepper(gimg,0.4)
