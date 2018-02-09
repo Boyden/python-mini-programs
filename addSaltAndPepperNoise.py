@@ -10,16 +10,23 @@ def SaltAndPepper(src,percetage):
 
     NoiseImg=np.copy(src)
     NoiseNum=int(percetage*src.shape[0]*src.shape[1])
+    
+    if len(src.shape) == 2:
+    
+        for i in range(NoiseNum):
+            randX=random.randint(0,src.shape[0])
+            randY=random.randint(0,src.shape[1])
+            if random.randint(0,2)==0:
+                NoiseImg[randX,randY]=0
+            else:
+                NoiseImg[randX,randY]=255   
 
-    for i in range(NoiseNum):
-        randX=random.randint(0,src.shape[0])
-        randY=random.randint(0,src.shape[1])
-        if random.randint(0,2)==0:
-            NoiseImg[randX,randY]=0
-        else:
-            NoiseImg[randX,randY]=255   
-
-    return NoiseImg 
+        return NoiseImg 
+    else:
+        b, g, r = cv2.split(src)
+        b, g, r = SaltAndPepper(b,percetage), SaltAndPepper(g,percetage), SaltAndPepper(r,percetage)
+        NoiseImg = cv2.merge([b, g, r])
+        return NoiseImg
     
 if __name__=='__main__':
 
