@@ -7,9 +7,9 @@ def SaltAndPepper(src,percetage):
     NoiseNum=int(percetage*src.shape[0]*src.shape[1])
 
     for i in range(NoiseNum):
-        randX=random.randint(0,src.shape[0]-1)
-        randY=random.randint(0,src.shape[1]-1)
-        if random.randint(0,1)==0:
+        randX=random.randint(0,src.shape[0])
+        randY=random.randint(0,src.shape[1])
+        if random.randint(0,2)==0:
             NoiseImg[randX,randY]=0
         else:
             NoiseImg[randX,randY]=255   
