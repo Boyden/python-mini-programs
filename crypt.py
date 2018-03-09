@@ -18,7 +18,6 @@ class AESCrypto():
     	cipher = AES.new(key.encode("utf-8"), AES.MODE_CFB, IV)
     	return cipher.decrypt(bytes.fromhex(str)).decode("utf-8")
 
-if __name__ = "__main__"
 IV = "9876543210000000000000"[0:AES.block_size].encode("utf-8")
 key = "hello"
 s = "a stu den"
