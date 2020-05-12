@@ -1,9 +1,11 @@
-from PyQt5.QtWidgets import QMainWindow, QTextEdit, QAction, QFileDialog, QApplication, QWidget, QHBoxLayout, QVBoxLayout, QTableWidget
-from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QIcon, QFont
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import pyqtSignal
 import sys
 
 class Train_window(QWidget):
+    sig = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -28,7 +30,7 @@ class Train_window(QWidget):
         self.lineEdit_1.setText("2")
         self.lineEdit_2.setText("2")
 
-        self.pushButton.clicked.connect(self.gen_table)
+
 
         hbox = QHBoxLayout()
         hbox.addWidget(self.pushButton_2)
@@ -45,18 +47,24 @@ class Train_window(QWidget):
         vbox.addLayout(h_line)
         vbox.addWidget(self.pushButton)
 
+        self.pushButton.clicked.connect(self.slot_btn)
+        self.sig.connect(self.gen_table)
+
         self.setLayout(vbox)
         self.setGeometry(300, 300, 500, 500)
         self.setWindowTitle('Train data')
         self.show()
 
+    def slot_btn(self):
+        self.sig.emit()
+
     def gen_table(self):
-        self.hide()
-        col = int(self.lineEdit_1.text()) + 1
-        row = int(self.lineEdit.text()) + 1
+        
+        col = int(self.lineEdit_2.text()) + 1
+        row = int(self.lineEdit.text())
         print('row:{}, col:{}'.format(row, col))
-        train_data = Train_data(row, col)
-        train_data.show()
+        self.train_data = Train_data(row, col)
+        self.train_data.show()
 
 class Train_data(QWidget):
 
@@ -67,27 +75,41 @@ class Train_data(QWidget):
 
     def initUI(self, row, col):      
 
-        self.table = QTableWidget()
+        self.table = QTableWidget(self)
+        self.button = QPushButton(self)
+
         self.table.setRowCount(row)
         self.table.setColumnCount(col)
+        self.button.setText("确认")
+        self.button.clicked.connect(self.save_text)
 
-        # hbox = QHBoxLayout()
-        # hbox.addWidget(self.pushButton_2)
-        # hbox.addWidget(self.pushButton_3)
+        font = QFont('', 15)
+        font.setBold(True)
+        self.table.horizontalHeader().setFont(font)
+        
+        headers = [str(i+1) for i in range(col-1)]
+        headers.append("label")
+        self.table.setHorizontalHeaderLabels(headers)
+        hbox = QHBoxLayout()
+        hbox.addWidget(self.table)
+        hbox.addWidget(self.button)
 
         # h_line = QHBoxLayout()
         # h_line.addWidget(self.lineEdit)
         # h_line.addWidget(self.lineEdit_2)
 
-        # vbox = QVBoxLayout()
-        # vbox.addLayout(hbox)
+        vbox = QVBoxLayout()
+        vbox.addLayout(hbox)
         # vbox.addLayout(h_line)
         # vbox.addWidget(self.pushButton)
 
-        # self.setLayout(vbox)
-        self.setGeometry(300, 300, 500, 500)
+        self.setLayout(vbox)
+        self.setGeometry(800, 300, 1000, 500)
         self.setWindowTitle('Train data')
         # self.show()
+
+    def save_text(self):
+        pass
 
 if __name__ == '__main__':
 
