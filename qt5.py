@@ -5,7 +5,7 @@ from PyQt5.QtCore import pyqtSignal
 import sys
 import numpy as np
 
-class Train_window(QWidget):
+class Model_window(QWidget):
     # sig = pyqtSignal()
 
     def __init__(self):
@@ -23,23 +23,8 @@ class Train_window(QWidget):
         self.lineEdit_1 = QtWidgets.QLineEdit(self)
         self.lineEdit_2 = QtWidgets.QLineEdit(self)
         
-        self.pushButton.setText("确认")
-        self.pushButton_1.setText("类别数")
-        self.pushButton_2.setText("样本数")
-        self.pushButton_3.setText("维度")
-        self.lineEdit.setText("10")
-        self.lineEdit_1.setText("2")
-        self.lineEdit_2.setText("2")
-
-        self.pushButton_7 = QtWidgets.QPushButton(self)
-        self.pushButton_4 = QtWidgets.QPushButton(self)
-        self.pushButton_5 = QtWidgets.QPushButton(self)
-        self.pushButton_6 = QtWidgets.QPushButton(self)
-        self.lineEdit_4 = QtWidgets.QLineEdit(self)
-        self.lineEdit_5 = QtWidgets.QLineEdit(self)
-        self.lineEdit_6 = QtWidgets.QLineEdit(self)
-        
-        self.pushButton.setText("确认")
+        self.pushButton.setText("输入训练数据")
+        self.pushButton.setObjectName("train")
         self.pushButton_1.setText("类别数")
         self.pushButton_2.setText("训练样本数")
         self.pushButton_3.setText("维度")
@@ -47,40 +32,39 @@ class Train_window(QWidget):
         self.lineEdit_1.setText("2")
         self.lineEdit_2.setText("2")
 
-        self.pushButton_7.setText("确认")
+        self.pushButton_7 = QtWidgets.QPushButton(self)
+        self.pushButton_4 = QtWidgets.QPushButton(self)
+        # self.pushButton_5 = QtWidgets.QPushButton(self)
+        # self.pushButton_6 = QtWidgets.QPushButton(self)
+        self.lineEdit_4 = QtWidgets.QLineEdit(self)
+        # self.lineEdit_5 = QtWidgets.QLineEdit(self)
+        # self.lineEdit_6 = QtWidgets.QLineEdit(self)
+
+        self.pushButton_7.setText("输入测试数据")
+        self.pushButton_7.setObjectName("test")
         self.pushButton_4.setText("测试样本数")
-        self.pushButton_5.setText("维度")
-        self.pushButton_6.setText("类别数")
+        # self.pushButton_5.setText("维度")
+        # self.pushButton_6.setText("类别数")
         self.lineEdit_4.setText("10")
-        self.lineEdit_5.setText("2")
-        self.lineEdit_6.setText("2")
+        # self.lineEdit_5.setText("2")
+        # self.lineEdit_6.setText("2")
 
         hbox = QHBoxLayout()
         hbox.addWidget(self.pushButton_2)
+        hbox.addWidget(self.pushButton_4)
         hbox.addWidget(self.pushButton_3)
         hbox.addWidget(self.pushButton_1)
 
         h_line = QHBoxLayout()
         h_line.addWidget(self.lineEdit)
+        h_line.addWidget(self.lineEdit_4)
         h_line.addWidget(self.lineEdit_2)
         h_line.addWidget(self.lineEdit_1)
-
-        h_1_box = QHBoxLayout()
-        h_1_box.addWidget(self.pushButton_4)
-        h_1_box.addWidget(self.pushButton_5)
-        h_1_box.addWidget(self.pushButton_6)
-
-        h_line_test = QHBoxLayout()
-        h_line_test.addWidget(self.lineEdit_4)
-        h_line_test.addWidget(self.lineEdit_5)
-        h_line_test.addWidget(self.lineEdit_6)
 
         vbox = QVBoxLayout()
         vbox.addLayout(hbox)
         vbox.addLayout(h_line)
         vbox.addWidget(self.pushButton)
-        vbox.addLayout(h_1_box)
-        vbox.addLayout(h_line_test)
         vbox.addWidget(self.pushButton_7)
 
         self.pushButton.clicked.connect(self.gen_table)
@@ -89,30 +73,38 @@ class Train_window(QWidget):
 
         self.setLayout(vbox)
         self.setGeometry(300, 300, 500, 500)
-        self.setWindowTitle('Train data')
+        self.setWindowTitle('Data')
         self.show()
 
     # def slot_btn(self):
     #     self.sig.emit()
 
     def gen_table(self):
-        
-        col = int(self.lineEdit_2.text()) + 1
-        row = int(self.lineEdit.text())
-        label = int(self.lineEdit_1.text())
-        print('row:{}, col:{}'.format(row, col))
-        self.train_data = Train_data(row, col, label)
+        sender = self.sender()
+        if sender.text() == '输入训练数据':
+            col = int(self.lineEdit_2.text()) + 1
+            row = int(self.lineEdit.text())
+            label = int(self.lineEdit_1.text())
+            self.model_data = Model_data(row, col, label, state='train')
 
-        self.train_data.show()
+            self.model_data.show()
+        else:
+            row = int(self.lineEdit_4.text())
+            col = int(self.lineEdit_2.text()) + 1
+            label = int(self.lineEdit_1.text())
+            self.model_data = Model_data(row, col, label, state='test')
 
-class Train_data(QWidget):
+            self.model_data.show()
 
-    def __init__(self, row, col, label):
+class Model_data(QWidget):
+
+    def __init__(self, row, col, label, state='train'):
         super().__init__()
         
         self.row = row
         self.col = col
         self.label = label
+        self.state = state
         self.initUI(row, col, label)
 
     def initUI(self, row, col, label):      
@@ -160,7 +152,7 @@ class Train_data(QWidget):
 
         self.setLayout(vbox)
         self.setGeometry(800, 300, 1000, 500)
-        self.setWindowTitle('Train data')
+        self.setWindowTitle('Data')
         self.setWindowModality(QtCore.Qt.ApplicationModal)
         # self.show()
 
@@ -170,9 +162,12 @@ class Train_data(QWidget):
             for j in range(self.col):
                 val = self.table.item(i, j)
                 arr[i, j] = float(val.text())
-
-        print(arr)
-        np.savetxt("traindata.csv", arr, delimiter=",", fmt="%.4f,%.4f,%d")
+        
+        num_fmt = '%.4f '*(self.col-1)+'%d'
+        if self.state == 'train':
+            np.savetxt("traindata.csv", arr, delimiter=",", fmt=num_fmt)
+        else:
+            np.savetxt("testdata.csv", arr, delimiter=",", fmt=num_fmt)
         self.dialog = Dialog()
         self.dialog.show()
 
@@ -197,7 +192,8 @@ class Dialog(QDialog):
         self.setWindowModality(QtCore.Qt.ApplicationModal)
 
 if __name__ == '__main__':
-
+    
+    print('\nStarting GUI\n')
     app = QApplication(sys.argv)
-    ex = Train_window()
+    ex = Model_window()
     sys.exit(app.exec_())
