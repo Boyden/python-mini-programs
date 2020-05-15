@@ -29,8 +29,8 @@ class Model_window(QWidget):
         self.pushButton_2.setText("训练样本数")
         self.pushButton_3.setText("维度")
         self.lineEdit.setText("10")
-        self.lineEdit_1.setText("2")
-        self.lineEdit_2.setText("2")
+        self.lineEdit_1.setText("5")
+        self.lineEdit_2.setText("5")
 
         self.pushButton_7 = QtWidgets.QPushButton(self)
         self.pushButton_4 = QtWidgets.QPushButton(self)
