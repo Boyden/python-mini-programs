@@ -140,14 +140,16 @@ class Model_data(QWidget):
         vbox.addLayout(hbox)
         # vbox.addLayout(h_line)
         # vbox.addWidget(self.pushButton)
-        
+
         for i in range(row):
             for j in range(col):
                 if j != col - 1:
                     rand_num = str(np.random.rand())[:5]
                     self.table.setItem(i,j, QTableWidgetItem(rand_num))
                 else:
-                    label_str = str(np.random.randint(label))
+                    val = self.table.item(i, 0).text()
+                    val = float(val)
+                    label_str = str(int(val*label))
                     self.table.setItem(i,j, QTableWidgetItem(label_str))
 
         self.setLayout(vbox)
